@@ -1,0 +1,57 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+    <section class="form-section">
+        <div class="back-link">
+            <a href="{{ baseUrl }}?route=user">
+                <i class="fas fa-arrow-left"></i> Retour à la liste
+            </a>
+        </div>
+        
+        <h1>Modifier l'utilisateur</h1>
+        
+        {% if error %}
+            <div class="alert alert-error">
+                <i class="fas fa-exclamation-circle"></i> {{ error }}
+            </div>
+        {% endif %}
+        
+        <div class="form-container">
+            <form method="post" action="{{ baseUrl }}?route=user/edit&id={{ user.id }}" class="edit-user-form" novalidate>                <div class="form-group">
+                    <label for="username">Nom d'utilisateur *</label>
+                    <input type="text" id="username" name="username" value="{{ user.username }}" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="email">Adresse email *</label>
+                    <input type="email" id="email" name="email" value="{{ user.email }}" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="role">Rôle *</label>
+                    <select id="role" name="role" required>
+                        <option value="user" {% if user.role == 'user' %}selected{% endif %}>Utilisateur</option>
+                        <option value="admin" {% if user.role == 'admin' %}selected{% endif %}>Administrateur</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Nouveau mot de passe</label>
+                    <input type="password" id="password" name="password" minlength="6">
+                    <small>Laissez vide pour ne pas modifier le mot de passe. Minimum 6 caractères.</small>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Enregistrer
+                    </button>
+                    <a href="{{ baseUrl }}?route=user" class="btn btn-outline">Annuler</a>
+                </div>
+            </form>
+        </div>
+    </section>
+{% endblock %}
+
+{% block scripts %}
+    <script src="{{ baseUrl }}assets/js/validation.js"></script>
+{% endblock %}

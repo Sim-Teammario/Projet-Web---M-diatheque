@@ -1,0 +1,172 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+    <section class="media-details-section">
+        <div class="back-link">
+            <a href="{{ baseUrl }}?route=media">
+                <i class="fas fa-arrow-left"></i> Retour à la liste
+            </a>
+        </div>
+        
+        <div class="media-details">
+            <div class="media-icon-large">
+                {% if media.type == 'book' %}
+                    <i class="fas fa-book"></i>
+                {% elseif media.type == 'dvd' %}
+                    <i class="fas fa-film"></i>
+                {% elseif media.type == 'music' %}
+                    <i class="fas fa-music"></i>
+                {% else %}
+                    <i class="fas fa-gamepad"></i>
+                {% endif %}
+            </div>
+            
+            <div class="media-info-container">
+                <h1>{{ media.title }}</h1>
+                
+                <div class="media-metadata">
+                    <div class="media-type">
+                        {% if media.type == 'book' %}
+                            <span class="badge book">Livre</span>
+                        {% elseif media.type == 'dvd' %}
+                            <span class="badge dvd">DVD</span>
+                        {% elseif media.type == 'music' %}
+                            <span class="badge music">CD / Musique</span>
+                        {% else %}
+                            <span class="badge game">Jeu vidéo</span>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="media-status {{ media.available ? 'available' : 'borrowed' }}">
+                        {% if media.available %}
+                            <i class="fas fa-check-circle"></i> Disponible
+                        {% else %}
+                            <i class="fas fa-times-circle"></i> Emprunté
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <div class="media-attributes">
+                    <div class="attribute">
+                        <span class="attribute-label">
+                            {% if media.type == 'book' %}
+                                Auteur
+                            {% elseif media.type == 'dvd' %}
+                                Réalisateur
+                            {% elseif media.type == 'music' %}
+                                Artiste
+                            {% else %}
+                                Développeur
+                            {% endif %}
+                        </span>
+                        <span class="attribute-value">{{ media.creator }}</span>
+                    </div>
+                    
+                    <div class="attribute">
+                        <span class="attribute-label">Année</span>
+                        <span class="attribute-value">{{ media.year }}</span>
+                    </div>
+                    
+                    {% if media.type == 'book' %}
+                        <div class="attribute">
+                            <span class="attribute-label">ISBN</span>
+                            <span class="attribute-value">{{ media.isbn }}</span>
+                        </div>
+                        
+                        <div class="attribute">
+                            <span class="attribute-label">Pages</span>
+                            <span class="attribute-value">{{ media.pages }}</span>
+                        </div>
+                        
+                        <div class="attribute">
+                            <span class="attribute-label">Éditeur</span>
+                            <span class="attribute-value">{{ media.publisher }}</span>
+                        </div>
+                    {% elseif media.type == 'dvd' %}
+                        <div class="attribute">
+                            <span class="attribute-label">Durée</span>
+                            <span class="attribute-value">{{ media.duration }} min</span>
+                        </div>
+                        
+                        <div class="attribute">
+                            <span class="attribute-label">Genre</span>
+                            <span class="attribute-value">{{ media.genre }}</span>
+                        </div>
+                    {% elseif media.type == 'music' %}
+                        <div class="attribute">
+                            <span class="attribute-label">Artiste</span>
+                            <span class="attribute-value">{{ media.artist }}</span>
+                        </div>
+                        
+                        <div class="attribute">
+                            <span class="attribute-label">Album</span>
+                            <span class="attribute-value">{{ media.album }}</span>
+                        </div>
+                        
+                        <div class="attribute">
+                            <span class="attribute-label">Durée</span>
+                            <span class="attribute-value">{{ media.duration }} min</span>
+                        </div>
+                        
+                        <div class="attribute">
+                            <span class="attribute-label">Genre</span>
+                            <span class="attribute-value">{{ media.genre }}</span>
+                        </div>
+                    {% elseif media.type == 'game' %}
+                        <div class="attribute">
+                            <span class="attribute-label">Plateforme</span>
+                            <span class="attribute-value">{{ media.platform }}</span>
+                        </div>
+                        
+                        <div class="attribute">
+                            <span class="attribute-label">Éditeur</span>
+                            <span class="attribute-value">{{ media.publisher }}</span>
+                        </div>
+                        
+                        <div class="attribute">
+                            <span class="attribute-label">Genre</span>
+                            <span class="attribute-value">{{ media.genre }}</span>
+                        </div>
+                    {% endif %}
+                </div>
+                
+                <div class="media-description">
+                    <h2>Description</h2>
+                    <p>{{ media.description }}</p>
+                </div>
+                
+                <div class="media-actions">
+                    {% if isLoggedIn %}
+                        {% if media.available %}
+                            <form method="post" action="{{ baseUrl }}?route=loan/borrow">
+                                <input type="hidden" name="media_id" value="{{ media.id }}">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-hand-holding"></i> Emprunter
+                                </button>
+                            </form>
+                        {% endif %}
+                    {% else %}
+                        <a href="{{ baseUrl }}?route=auth/login" class="btn btn-secondary">
+                            <i class="fas fa-sign-in-alt"></i> Connexion pour emprunter
+                        </a>
+                    {% endif %}
+                    
+                    {% if isAdmin %}
+                        <div class="admin-actions">
+                            <a href="{{ baseUrl }}?route=media/edit&id={{ media.id }}" class="btn btn-outline">
+                                <i class="fas fa-edit"></i> Modifier
+                            </a>
+                            
+                            <form method="post" action="{{ baseUrl }}?route=media/delete" class="delete-form" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce média ?');">
+                                <input type="hidden" name="id" value="{{ media.id }}">
+                                <button type="submit" class="btn btn-danger">
+                                    <i class="fas fa-trash"></i> Supprimer
+                                </button>
+                            </form>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

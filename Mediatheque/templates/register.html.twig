@@ -1,0 +1,52 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+    <section class="auth-section">
+        <h1>Inscription</h1>
+        
+        {% if error %}
+            <div class="alert alert-error">
+                <i class="fas fa-exclamation-circle"></i> {{ error }}
+            </div>
+        {% endif %}
+        
+        <div class="auth-form-container">
+            <form class="auth-form" method="post" action="{{ baseUrl }}?route=auth/register" novalidate>
+                <!-- Aucun attribut action pour que le formulaire soit soumis à l'URL courante -->
+                <input type="hidden" name="route" value="auth/register">
+                <div class="form-group">
+                    <label for="username">Nom d'utilisateur</label>
+                    <input type="text" id="username" name="username" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="email">Adresse email</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Mot de passe</label>
+                    <input type="password" id="password" name="password" required minlength="6">
+                    <small>Le mot de passe doit contenir au moins 6 caractères.</small>
+                </div>
+                
+                <div class="form-group">
+                    <label for="confirm_password">Confirmer le mot de passe</label>
+                    <input type="password" id="confirm_password" name="confirm_password" required>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">S'inscrire</button>
+                </div>
+            </form>
+        </div>
+        
+        <div class="auth-links">
+            <p>Vous avez déjà un compte ? <a href="{{ baseUrl }}?route=auth/login">Se connecter</a></p>
+        </div>
+    </section>
+{% endblock %}
+
+{% block scripts %}
+    <script src="{{ baseUrl }}assets/js/validation.js"></script>
+{% endblock %}

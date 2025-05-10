@@ -1,0 +1,169 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+    <section class="form-section">
+        <div class="back-link">
+            <a href="{{ baseUrl }}?route=media">
+                <i class="fas fa-arrow-left"></i> Retour à la liste
+            </a>
+        </div>
+        
+        <h1>Ajouter un média</h1>
+        
+        {% if error %}
+            <div class="alert alert-error">
+                <i class="fas fa-exclamation-circle"></i> {{ error }}
+            </div>
+        {% endif %}
+        
+        <div class="form-container">
+            <form method="post" action="{{ baseUrl }}?route=media/add" class="media-form" novalidate>
+                <div class="form-section">
+                    <h2>Informations générales</h2>
+                    
+                    <div class="form-group">
+                        <label for="title">Titre *</label>
+                        <input type="text" id="title" name="title" value="{{ formData.title|default('') }}" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="type">Type *</label>
+                        <select id="type" name="type" required>
+                            <option value="">Sélectionner un type</option>
+                            <option value="book" {% if formData.type == 'book' %}selected{% endif %}>Livre</option>
+                            <option value="dvd" {% if formData.type == 'dvd' %}selected{% endif %}>DVD</option>
+                            <option value="game" {% if formData.type == 'game' %}selected{% endif %}>Jeu vidéo</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="creator">
+                            <span class="creator-label-book">Auteur *</span>
+                            <span class="creator-label-dvd">Réalisateur *</span>
+                            <span class="creator-label-game">Développeur *</span>
+                        </label>
+                        <input type="text" id="creator" name="creator" value="{{ formData.creator|default('') }}" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="year">Année</label>
+                        <input type="number" id="year" name="year" value="{{ formData.year|default('') }}" min="1800" max="{{ "now"|date("Y") }}">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="description">Description</label>
+                        <textarea id="description" name="description" rows="4">{{ formData.description|default('') }}</textarea>
+                    </div>
+                </div>
+                
+                <!-- Book-specific fields -->
+                <div class="form-section type-specific book-fields">
+                    <h2>Informations spécifiques au livre</h2>
+                    
+                    <div class="form-group">
+                        <label for="isbn">ISBN (International Standard Book Number)</label>
+                        <input type="text" id="isbn" name="isbn" value="{{ formData.isbn|default('') }}">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="pages">Nombre de pages</label>
+                        <input type="number" id="pages" name="pages" value="{{ formData.pages|default('') }}" min="1">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="publisher">Éditeur</label>
+                        <input type="text" id="publisher" name="publisher" value="{{ formData.publisher|default('') }}">
+                    </div>
+                </div>
+                
+                <!-- DVD-specific fields -->
+                <div class="form-section type-specific dvd-fields">
+                    <h2>Informations spécifiques au DVD</h2>
+                    
+                    <div class="form-group">
+                        <label for="duration">Durée (minutes)</label>
+                        <input type="number" id="duration" name="duration" value="{{ formData.duration|default('') }}" min="1">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="genre">Genre</label>
+                        <input type="text" id="genre" name="genre" value="{{ formData.genre|default('') }}">
+                    </div>
+                </div>
+                
+                <!-- Game-specific fields -->
+                <div class="form-section type-specific game-fields">
+                    <h2>Informations spécifiques au jeu vidéo</h2>
+                    
+                    <div class="form-group">
+                        <label for="platform">Plateforme</label>
+                        <input type="text" id="platform" name="platform" value="{{ formData.platform|default('') }}">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="publisher">Éditeur</label>
+                        <input type="text" id="publisher" name="publisher" value="{{ formData.publisher|default('') }}">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="genre">Genre</label>
+                        <input type="text" id="genre" name="genre" value="{{ formData.genre|default('') }}">
+                    </div>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Enregistrer
+                    </button>
+                    <a href="{{ baseUrl }}?route=media" class="btn btn-outline">Annuler</a>
+                </div>
+            </form>
+        </div>
+    </section>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const typeSelect = document.getElementById('type');
+            const typeSpecificFields = document.querySelectorAll('.type-specific');
+            const creatorLabelBook = document.querySelector('.creator-label-book');
+            const creatorLabelDvd = document.querySelector('.creator-label-dvd');
+            const creatorLabelGame = document.querySelector('.creator-label-game');
+            
+            function updateFormFields() {
+                const selectedType = typeSelect.value;
+                
+                // Hide all type-specific fields
+                typeSpecificFields.forEach(field => {
+                    field.style.display = 'none';
+                });
+                
+                // Hide all creator labels
+                creatorLabelBook.style.display = 'none';
+                creatorLabelDvd.style.display = 'none';
+                creatorLabelGame.style.display = 'none';
+                
+                // Show fields for selected type
+                if (selectedType === 'book') {
+                    document.querySelector('.book-fields').style.display = 'block';
+                    creatorLabelBook.style.display = 'inline';
+                } else if (selectedType === 'dvd') {
+                    document.querySelector('.dvd-fields').style.display = 'block';
+                    creatorLabelDvd.style.display = 'inline';
+                } else if (selectedType === 'game') {
+                    document.querySelector('.game-fields').style.display = 'block';
+                    creatorLabelGame.style.display = 'inline';
+                }
+            }
+            
+            // Initial update
+            updateFormFields();
+            
+            // Update on type change
+            typeSelect.addEventListener('change', updateFormFields);
+        });
+    </script>
+    
+    <script src="{{ baseUrl }}assets/js/validation.js"></script>
+{% endblock %}

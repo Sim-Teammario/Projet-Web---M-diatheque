@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+    <section class="error-section">
+        <div class="error-container">
+            <i class="fas fa-exclamation-triangle"></i>
+            <h1>Erreur</h1>
+            <p>{{ message|default('Une erreur est survenue.') }}</p>
+            <a href="{{ baseUrl }}" class="btn btn-primary">Retour à l'accueil</a>
+        </div>
+    </section>
+{% endblock %}

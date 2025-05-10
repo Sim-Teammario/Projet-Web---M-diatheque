@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title|default('Médiathèque') }}</title>
+    <link rel="stylesheet" href="{{ baseUrl }}assets/css/style.css">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    {% include 'partials/header.html.twig' %}
+    
+    <main class="container">
+        {% if session.flash_message is defined and session.flash_message %}
+            <div class="alert alert-success">
+                {{ session.flash_message }}
+            </div>
+        {% endif %}
+        
+        {% if session.flash_error is defined and session.flash_error %}
+            <div class="alert alert-error">
+                {{ session.flash_error }}
+            </div>
+        {% endif %}
+        
+        {% block content %}{% endblock %}
+    </main>
+    
+    {% include 'partials/footer.html.twig' %}
+    
+    <script src="{{ baseUrl }}assets/js/main.js"></script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,77 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+    <section class="profile-section">
+        <div class="profile-header">
+            <div class="profile-avatar">
+                <i class="fas fa-user"></i>
+            </div>
+            
+            <div class="profile-info">
+                <h1>{{ user.username }}</h1>
+                <p class="profile-email">{{ user.email }}</p>
+                <div class="profile-role">
+                    {% if user.role == 'admin' %}
+                        <i class="fas fa-shield-alt"></i> Administrateur
+                    {% else %}
+                        <i class="fas fa-user"></i> Utilisateur
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        
+        <div class="profile-stats">
+            <div class="profile-stat-card">
+                <i class="fas fa-book-open"></i>
+                <h3>Total emprunts</h3>
+                <p>{{ stats.total_loans }}</p>
+            </div>
+            
+            <div class="profile-stat-card">
+                <i class="fas fa-clock"></i>
+                <h3>Emprunts actifs</h3>
+                <p>{{ stats.active_loans }}</p>
+            </div>
+            
+            <div class="profile-stat-card">
+                <i class="fas fa-heart"></i>
+                <h3>Type préféré</h3>
+                <p>
+                    {% if stats.favorite_type == 'book' %}
+                        Livres
+                    {% elseif stats.favorite_type == 'dvd' %}
+                        DVD
+                    {% elseif stats.favorite_type == 'game' %}
+                        Jeux vidéo
+                    {% else %}
+                        -
+                    {% endif %}
+                </p>
+            </div>
+            
+            <div class="profile-stat-card {% if stats.has_overdue %}alert-error{% endif %}">
+                <i class="{% if stats.has_overdue %}fas fa-exclamation-triangle{% else %}fas fa-check-circle{% endif %}"></i>
+                <h3>Statut</h3>
+                <p>
+                    {% if stats.has_overdue %}
+                        En retard
+                    {% else %}
+                        À jour
+                    {% endif %}
+                </p>
+            </div>
+        </div>
+        
+        <div class="profile-actions">
+            <a href="{{ baseUrl }}?route=loan" class="btn btn-primary">
+                <i class="fas fa-clock"></i> Emprunts en cours
+            </a>
+            <a href="{{ baseUrl }}?route=loan/history" class="btn btn-secondary">
+                <i class="fas fa-history"></i> Historique
+            </a>
+            <a href="{{ baseUrl }}?route=media" class="btn btn-outline">
+                <i class="fas fa-search"></i> Explorer les médias
+            </a>
+        </div>
+    </section>
+{% endblock %}

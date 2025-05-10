@@ -1,0 +1,148 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+    <section class="stats-section">
+        <h1>Tableau de bord administrateur</h1>
+        
+        <div class="stats-container">
+            <div class="stat-card">
+                <i class="fas fa-book-open"></i>
+                <h3>Total médias</h3>
+                <p>{{ stats.total_media }}</p>
+            </div>
+            
+            <div class="stat-card">
+                <i class="fas fa-users"></i>
+                <h3>Utilisateurs</h3>
+                <p>{{ stats.total_users }}</p>
+            </div>
+            
+            <div class="stat-card">
+                <i class="fas fa-exchange-alt"></i>
+                <h3>Total emprunts</h3>
+                <p>{{ stats.total_loans }}</p>
+            </div>
+            
+            <div class="stat-card">
+                <i class="fas fa-clock"></i>
+                <h3>Emprunts actifs</h3>
+                <p>{{ stats.active_loans }}</p>
+            </div>
+            
+            <div class="stat-card">
+                <i class="fas fa-exclamation-triangle"></i>
+                <h3>En retard</h3>
+                <p>{{ stats.overdue_loans }}</p>
+            </div>
+            
+            <div class="stat-card">
+                <i class="fas fa-check-circle"></i>
+                <h3>Disponibles</h3>
+                <p>{{ stats.available_media }}</p>
+            </div>
+        </div>
+    </section>
+    
+    <div class="dashboard-section">
+        <div class="dashboard-card">
+            <h2>Répartition des médias</h2>
+            <div class="stats-details">
+                <div class="stat-row">
+                    <span class="stat-label">
+                        <span class="type-indicator type-book"></span>
+                        Livres
+                    </span>
+                    <span class="stat-value">{{ stats.media_by_type.book }}</span>
+                </div>
+                
+                <div class="stat-row">
+                    <span class="stat-label">
+                        <span class="type-indicator type-dvd"></span>
+                        DVD
+                    </span>
+                    <span class="stat-value">{{ stats.media_by_type.dvd }}</span>
+                </div>
+                
+                <div class="stat-row">
+                    <span class="stat-label">
+                        <span class="type-indicator type-game"></span>
+                        Jeux vidéo
+                    </span>
+                    <span class="stat-value">{{ stats.media_by_type.game }}</span>
+                </div>
+                
+                <div class="stat-row">
+                    <span class="stat-label">Total</span>
+                    <span class="stat-value">{{ stats.total_media }}</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="dashboard-card">
+            <h2>Médias les plus populaires</h2>
+            {% if stats.popular_media|length > 0 %}
+                <div class="popular-media-list">
+                    {% for media in stats.popular_media %}
+                        <div class="popular-item">
+                            <div class="popular-title">
+                                <span class="type-indicator {% if media.type == 'book' %}type-book{% elseif media.type == 'dvd' %}type-dvd{% else %}type-game{% endif %}"></span>
+                                <a href="{{ baseUrl }}?route=media/details&id={{ media.id }}">{{ media.title }}</a>
+                            </div>
+                            <div class="popular-count">{{ media.loan_count }} emprunts</div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="empty-state">
+                    <p>Aucune donnée disponible</p>
+                </div>
+            {% endif %}
+        </div>
+        
+        <div class="dashboard-card">
+            <h2>Emprunts en retard</h2>
+            {% if overdueLoans|length > 0 %}
+                <div class="overdue-list">
+                    {% for loan in overdueLoans %}
+                        <div class="popular-item">
+                            <div class="popular-title">
+                                <span class="type-indicator {% if loan.media.type == 'book' %}type-book{% elseif loan.media.type == 'dvd' %}type-dvd{% else %}type-game{% endif %}"></span>
+                                <a href="{{ baseUrl }}?route=media/details&id={{ loan.media.id }}">{{ loan.media.title }}</a>
+                                <small>({{ loan.user.username }})</small>
+                            </div>
+                            <div class="popular-count">{{ loan.days_overdue }} jour(s)</div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="empty-state">
+                    <p>Aucun emprunt en retard</p>
+                </div>
+            {% endif %}
+        </div>
+        
+        <div class="dashboard-card">
+            <h2>Emprunts récents</h2>
+            {% if stats.recent_loans|length > 0 %}
+                <div class="recent-loans-list">
+                    {% for loan in stats.recent_loans %}
+                        {% set media = mediaModel.getMediaById(loan.media_id) %}
+                        {% set user = userModel.getUserById(loan.user_id) %}
+                        <div class="popular-item">
+                            <div class="popular-title">
+                                <span class="type-indicator {% if media.type == 'book' %}type-book{% elseif media.type == 'dvd' %}type-dvd{% else %}type-game{% endif %}"></span>
+                                <a href="{{ baseUrl }}?route=media/details&id={{ media.id }}">{{ media.title }}</a>
+                                <small>({{ user.username }})</small>
+                            </div>
+                            <div class="popular-count">{{ loan.loan_date|date("d/m/Y") }}</div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="empty-state">
+                    <p>Aucun emprunt récent</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

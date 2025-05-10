@@ -1,0 +1,73 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+    <section class="users-section">
+        <div class="section-header">
+            <h1>Utilisateurs</h1>
+        </div>
+        
+        {% if users|length > 0 %}
+            <div class="users-list">
+                {% for user in users %}
+                    <div class="user-card">
+                        <div class="user-header">
+                            <div class="user-avatar">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <h3 class="user-name">{{ user.username }}</h3>
+                            <p class="user-email">{{ user.email }}</p>
+                            <span class="badge {% if user.role == 'admin' %}book{% else %}dvd{% endif %}">
+                                {% if user.role == 'admin' %}Administrateur{% else %}Utilisateur{% endif %}
+                            </span>
+                        </div>
+                        
+                        <div class="user-body">
+                            <div class="user-info">
+                                <div class="user-info-item">
+                                    <span class="label">Inscrit le</span>
+                                    <span class="value">{{ user.created_at|date("d/m/Y") }}</span>
+                                </div>
+                                <div class="user-info-item">
+                                    <span class="label">ID utilisateur</span>
+                                    <span class="value">{{ user.id }}</span>
+                                </div>
+                            </div>
+                            
+                            <div class="user-actions">
+                                <a href="{{ baseUrl }}?route=user/edit&id={{ user.id }}" class="btn btn-outline">
+                                    <i class="fas fa-edit"></i> Modifier
+                                </a>
+                                
+                                <a href="{{ baseUrl }}?route=loan/history&user_id={{ user.id }}" class="btn btn-secondary">
+                                    <i class="fas fa-history"></i> Historique
+                                </a>
+                                
+                                {% if user.id != session.user.id %}
+                                    <form method="post" action="{{ baseUrl }}?route=user/delete" class="delete-form">
+                                        <input type="hidden" name="id" value="{{ user.id }}">
+                                        <button type="submit" class="btn btn-danger">
+                                            <i class="fas fa-trash"></i> Supprimer
+                                        </button>
+                                    </form>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            
+            {% include 'partials/pagination.html.twig' with {
+                'currentPage': pagination.currentPage,
+                'totalPages': pagination.totalPages,
+                'hasNextPage': pagination.hasNextPage,
+                'hasPrevPage': pagination.hasPrevPage,
+                'baseUrl': baseUrl ~ '?route=user'
+            } %}
+        {% else %}
+            <div class="empty-state">
+                <i class="fas fa-info-circle"></i>
+                <p>Aucun utilisateur trouvé.</p>
+            </div>
+        {% endif %}
+    </section>
+{% endblock %}

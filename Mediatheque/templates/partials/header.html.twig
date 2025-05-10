@@ -1,0 +1,66 @@
+<header>
+    <div class="container header-container">
+        <!-- Menu burger à gauche -->
+        <div class="burger-menu-container">
+            <button class="menu-toggle" aria-label="Menu">
+                <i class="fas fa-bars"></i> <span>MENU</span>
+            </button>
+        </div>
+
+        <!-- Logo centré -->
+        <div class="logo centered-logo">
+            <a href="{{ baseUrl }}">
+                <i class="fas fa-book-open"></i>
+                <span>Médiathèque</span>
+            </a>
+        </div>
+
+        <!-- Boutons auth à droite -->
+        <div class="auth-buttons">
+            {% if session.user_id is defined and session.user_id %}
+                <a href="{{ baseUrl }}?route=auth/logout" class="btn btn-outline btn-sm">
+                    <i class="fas fa-sign-out-alt"></i> Déconnexion ({{ session.username }})
+                </a>
+            {% else %}
+                <div class="auth-buttons-group">
+                    <a href="{{ baseUrl }}?route=auth/login" class="btn btn-outline btn-sm">
+                        <i class="fas fa-sign-in-alt"></i><span class="btn-text"> Connexion</span>
+                    </a>
+                    <a href="{{ baseUrl }}?route=auth/register" class="btn btn-primary btn-sm">
+                        <i class="fas fa-user-plus"></i><span class="btn-text"> Inscription</span>
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Menu de navigation (visible après clic sur le burger) -->
+        <nav class="main-nav">
+            <ul class="nav-menu burger-menu">
+                <li><a href="{{ baseUrl }}"><i class="fas fa-home"></i> Accueil</a></li>
+                <li><a href="{{ baseUrl }}?route=media"><i class="fas fa-film"></i> Médias</a></li>
+                <li><a href="{{ baseUrl }}?route=media/search"><i class="fas fa-search"></i> Recherche</a></li>
+
+                {% if session.user_id is defined and session.user_id %}
+                    <li><a href="{{ baseUrl }}?route=loan"><i class="fas fa-clipboard-list"></i> Mes emprunts</a></li>
+
+                    {% if session.user_role == 'admin' %}
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle">
+                                <i class="fas fa-shield-alt"></i> Administration
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a href="{{ baseUrl }}?route=media/add"><i class="fas fa-plus"></i> Ajouter un média</a></li>
+                                <li><a href="{{ baseUrl }}?route=user"><i class="fas fa-users"></i> Utilisateurs</a></li>
+                                <li><a href="{{ baseUrl }}?route=statistics"><i class="fas fa-chart-bar"></i> Statistiques</a></li>
+                            </ul>
+                        </li>
+                    {% else %}
+                        <li><a href="{{ baseUrl }}?route=statistics"><i class="fas fa-chart-bar"></i> Mes stats</a></li>
+                    {% endif %}
+
+                    <li><a href="{{ baseUrl }}?route=user/profile"><i class="fas fa-id-card"></i> Mon profil</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
+</header>

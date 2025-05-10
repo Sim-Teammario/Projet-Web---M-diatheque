@@ -1,0 +1,126 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+    <section class="form-section">
+        <div class="back-link">
+            <a href="{{ baseUrl }}?route=media/details&id={{ media.id }}">
+                <i class="fas fa-arrow-left"></i> Retour aux détails
+            </a>
+        </div>
+        
+        <h1>Modifier un média</h1>
+        
+        {% if error %}
+            <div class="alert alert-error">
+                <i class="fas fa-exclamation-circle"></i> {{ error }}
+            </div>
+        {% endif %}
+        
+        <div class="form-container">
+            <form method="post" action="{{ baseUrl }}?route=media/edit&id={{ media.id }}" class="media-form" novalidate>
+                <div class="form-section">
+                    <h2>Informations générales</h2>
+                    
+                    <div class="form-group">
+                        <label for="title">Titre *</label>
+                        <input type="text" id="title" name="title" value="{{ media.title }}" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="type">Type</label>
+                        <input type="text" value="{% if media.type == 'book' %}Livre{% elseif media.type == 'dvd' %}DVD{% else %}Jeu vidéo{% endif %}" readonly disabled>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="creator">
+                            {% if media.type == 'book' %}
+                                Auteur *
+                            {% elseif media.type == 'dvd' %}
+                                Réalisateur *
+                            {% else %}
+                                Développeur *
+                            {% endif %}
+                        </label>
+                        <input type="text" id="creator" name="creator" value="{{ media.creator }}" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="year">Année</label>
+                        <input type="number" id="year" name="year" value="{{ media.year }}" min="1800" max="{{ "now"|date("Y") }}">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="description">Description</label>
+                        <textarea id="description" name="description" rows="4">{{ media.description }}</textarea>
+                    </div>
+                </div>
+                
+                <!-- Type-specific fields -->
+                {% if media.type == 'book' %}
+                    <div class="form-section">
+                        <h2>Informations spécifiques au livre</h2>
+                        
+                        <div class="form-group">
+                            <label for="isbn">ISBN (International Standard Book Number)</label>
+                            <input type="text" id="isbn" name="isbn" value="{{ media.isbn }}">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="pages">Nombre de pages</label>
+                            <input type="number" id="pages" name="pages" value="{{ media.pages }}" min="1">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="publisher">Éditeur</label>
+                            <input type="text" id="publisher" name="publisher" value="{{ media.publisher }}">
+                        </div>
+                    </div>
+                {% elseif media.type == 'dvd' %}
+                    <div class="form-section">
+                        <h2>Informations spécifiques au DVD</h2>
+                        
+                        <div class="form-group">
+                            <label for="duration">Durée (minutes)</label>
+                            <input type="number" id="duration" name="duration" value="{{ media.duration }}" min="1">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="genre">Genre</label>
+                            <input type="text" id="genre" name="genre" value="{{ media.genre }}">
+                        </div>
+                    </div>
+                {% elseif media.type == 'game' %}
+                    <div class="form-section">
+                        <h2>Informations spécifiques au jeu vidéo</h2>
+                        
+                        <div class="form-group">
+                            <label for="platform">Plateforme</label>
+                            <input type="text" id="platform" name="platform" value="{{ media.platform }}">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="publisher">Éditeur</label>
+                            <input type="text" id="publisher" name="publisher" value="{{ media.publisher }}">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="genre">Genre</label>
+                            <input type="text" id="genre" name="genre" value="{{ media.genre }}">
+                        </div>
+                    </div>
+                {% endif %}
+                
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Enregistrer
+                    </button>
+                    <a href="{{ baseUrl }}?route=media/details&id={{ media.id }}" class="btn btn-outline">Annuler</a>
+                </div>
+            </form>
+        </div>
+    </section>
+{% endblock %}
+
+{% block scripts %}
+    <script src="{{ baseUrl }}assets/js/validation.js"></script>
+{% endblock %}

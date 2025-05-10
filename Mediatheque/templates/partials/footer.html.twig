@@ -1,0 +1,34 @@
+<footer>
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Médiathèque</h3>
+                <p>Votre espace pour les livres, DVD, CD musicaux et jeux vidéo.</p>
+            </div>
+            
+            <div class="footer-section">
+                <h3>Liens utiles</h3>
+                <ul>
+                    <li><a href="{{ baseUrl }}">Accueil</a></li>
+                    <li><a href="{{ baseUrl }}?route=media">Médias</a></li>
+                    <li><a href="{{ baseUrl }}?route=media/search">Recherche</a></li>
+                    <li><a href="{{ baseUrl }}?route=legal">Mentions légales</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h3>Catégories</h3>
+                <ul>
+                    <li><a href="{{ baseUrl }}?route=media&type=book">Livres</a></li>
+                    <li><a href="{{ baseUrl }}?route=media&type=dvd">DVD</a></li>
+                    <li><a href="{{ baseUrl }}?route=media&type=music">Musique / CD</a></li>
+                    <li><a href="{{ baseUrl }}?route=media&type=game">Jeux vidéo</a></li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>&copy; {{ "now"|date("Y") }} Médiathèque. Tous droits réservés.</p>
+        </div>
+    </div>
+</footer>

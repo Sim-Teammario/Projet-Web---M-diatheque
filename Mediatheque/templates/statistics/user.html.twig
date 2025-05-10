@@ -1,0 +1,63 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+    <section class="stats-section">
+        <h1>Mes statistiques</h1>
+        
+        <div class="stats-container">
+            <div class="stat-card">
+                <i class="fas fa-book-open"></i>
+                <h3>Total emprunts</h3>
+                <p>{{ stats.total_loans }}</p>
+            </div>
+            
+            <div class="stat-card">
+                <i class="fas fa-clock"></i>
+                <h3>Emprunts actifs</h3>
+                <p>{{ stats.active_loans }}</p>
+            </div>
+            
+            <div class="stat-card">
+                <i class="fas fa-heart"></i>
+                <h3>Type préféré</h3>
+                <p>
+                    {% if stats.favorite_type == 'book' %}
+                        Livres
+                    {% elseif stats.favorite_type == 'dvd' %}
+                        DVD
+                    {% elseif stats.favorite_type == 'game' %}
+                        Jeux vidéo
+                    {% else %}
+                        -
+                    {% endif %}
+                </p>
+            </div>
+            
+            <div class="stat-card {% if stats.has_overdue %}total{% endif %}">
+                <i class="{% if stats.has_overdue %}fas fa-exclamation-triangle{% else %}fas fa-check-circle{% endif %}"></i>
+                <h3>Statut</h3>
+                <p>
+                    {% if stats.has_overdue %}
+                        En retard
+                    {% else %}
+                        À jour
+                    {% endif %}
+                </p>
+            </div>
+        </div>
+    </section>
+    
+    <div class="user-actions-container">
+        <div class="action-buttons">
+            <a href="{{ baseUrl }}?route=loan" class="btn btn-primary">
+                <i class="fas fa-clock"></i> Mes emprunts en cours
+            </a>
+            <a href="{{ baseUrl }}?route=loan/history" class="btn btn-secondary">
+                <i class="fas fa-history"></i> Mon historique
+            </a>
+            <a href="{{ baseUrl }}?route=media" class="btn btn-outline">
+                <i class="fas fa-search"></i> Explorer les médias
+            </a>
+        </div>
+    </div>
+{% endblock %}

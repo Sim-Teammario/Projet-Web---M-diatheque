@@ -1,0 +1,9 @@
+# Activer le moteur de réécriture
+RewriteEngine On
+
+# Ne pas appliquer les règles aux fichiers existants
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+# Rediriger toutes les requêtes vers index.php
+RewriteRule ^(.*)$ index.php [QSA,L]

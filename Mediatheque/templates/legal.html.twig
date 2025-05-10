@@ -1,0 +1,90 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+    <section class="legal-section">
+        <h1>Mentions légales</h1>
+        
+        <div class="legal-content">
+            <div class="legal-section">
+                <h2>Informations sur l'entreprise</h2>
+                <p><strong>Raison sociale :</strong> Médiathèque Municipale</p>
+                <p><strong>Numéro SIRET :</strong> 123 456 789 00012</p>
+                <p><strong>Forme juridique :</strong> Établissement public à caractère culturel</p>
+                <p><strong>Capital social :</strong> Non applicable (établissement public)</p>
+                <p><strong>Adresse du siège social :</strong> 7 Rue Diderot, 62000 Arras</p>
+                <p><strong>Directeur de la publication :</strong> Simon Taveirne</p>
+                <p><strong>Contact :</strong> simon.taveirne@proton.me</p>
+            </div>
+
+            <div class="legal-section">
+                <h2>Hébergement</h2>
+                <p><strong>Nom de l'hébergeur :</strong> Auto-hébergé</p>
+                <p><strong>Adresse :</strong> Non applicable</p>
+                <p><strong>Téléphone :</strong> Non applicable</p>
+            </div>
+            
+            <div class="legal-section">
+                <h2>Propriété intellectuelle</h2>
+                <p>L'ensemble du contenu de ce site (textes, illustrations, photographies, etc.) est la propriété exclusive de la Médiathèque Municipale ou de ses partenaires. Toute reproduction, représentation, modification, publication, adaptation de tout ou partie des éléments du site, quel que soit le moyen ou le procédé utilisé, est interdite, sauf autorisation écrite préalable.</p>
+            </div>
+            
+            <div class="legal-section">
+                <h2>Protection des données personnelles</h2>
+                <p>Conformément au Règlement Général sur la Protection des Données (RGPD), vous disposez d'un droit d'accès, de rectification, de suppression et d'opposition à vos données personnelles. Pour exercer ces droits, vous pouvez nous contacter à l'adresse suivante : dpo@mediatheque.fr.</p>
+                <p>Les informations recueillies sur ce site sont enregistrées dans un fichier informatisé par la Médiathèque Municipale pour la gestion des emprunts et retours de médias. Elles sont conservées pendant la durée de votre inscription et sont destinées aux services de la médiathèque.</p>
+            </div>
+            
+            <div class="legal-section">
+                <h2>Cookies</h2>
+                <p>Ce site utilise des cookies de session nécessaires à son fonctionnement. Ces cookies ne collectent pas d'informations personnelles et sont supprimés lorsque vous fermez votre navigateur.</p>
+            </div>
+            
+            <div class="legal-section">
+                <h2>Limitation de responsabilité</h2>
+                <p>La Médiathèque Municipale ne pourra être tenue responsable des dommages directs et indirects causés au matériel de l'utilisateur, lors de l'accès au site www.mediatheque.fr, et résultant soit de l'utilisation d'un matériel ne répondant pas aux spécifications techniques requises, soit de l'apparition d'un bug ou d'une incompatibilité.</p>
+            </div>
+            
+            <div class="legal-section">
+                <h2>Droit applicable et juridiction compétente</h2>
+                <p>Les présentes mentions légales sont soumises au droit français. En cas de litige, les tribunaux français seront seuls compétents.</p>
+            </div>
+        </div>
+    </section>
+    
+    <style>
+        .legal-section {
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .legal-section h1 {
+            color: var(--secondary-color);
+            margin-bottom: 20px;
+        }
+        
+        .legal-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .legal-content .legal-section {
+            margin-bottom: 30px;
+            padding: 0;
+            box-shadow: none;
+        }
+        
+        .legal-content h2 {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 10px;
+        }
+        
+        .legal-content p {
+            margin-bottom: 10px;
+        }
+    </style>
+{% endblock %}

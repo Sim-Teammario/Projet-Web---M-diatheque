@@ -1,0 +1,90 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+    <section class="loans-section">
+        <h1>Emprunts en cours</h1>
+        
+        {% if loans|length > 0 %}
+            <div class="loans-container">
+                <div class="loans-list">
+                    {% for loan in loans %}
+                        <div class="loan-card {{ loan.status }}">
+                            <div class="loan-media">
+                                <div class="media-icon">
+                                    {% if loan.media.type == 'book' %}
+                                        <i class="fas fa-book"></i>
+                                    {% elseif loan.media.type == 'dvd' %}
+                                        <i class="fas fa-film"></i>
+                                    {% else %}
+                                        <i class="fas fa-gamepad"></i>
+                                    {% endif %}
+                                </div>
+                                <div class="media-info">
+                                    <h3><a href="{{ baseUrl }}?route=media/details&id={{ loan.media.id }}">{{ loan.media.title }}</a></h3>
+                                    <p class="media-creator">{{ loan.media.creator }}</p>
+                                </div>
+                            </div>
+                            
+                            <div class="loan-info">
+                                <div class="loan-dates">
+                                    <div class="loan-date">
+                                        <span class="label">Emprunté le:</span>
+                                        <span class="value">{{ loan.loan_date|date("d/m/Y") }}</span>
+                                    </div>
+                                    <div class="due-date">
+                                        <span class="label">À retourner le:</span>
+                                        <span class="value">{{ loan.due_date|date("d/m/Y") }}</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="loan-status">
+                                    {% if loan.status == 'active' %}
+                                        <div class="status-badge active">
+                                            <i class="fas fa-clock"></i> 
+                                            {{ loan.days_remaining }} jour(s) restant(s)
+                                        </div>
+                                    {% else %}
+                                        <div class="status-badge overdue">
+                                            <i class="fas fa-exclamation-triangle"></i> 
+                                            En retard de {{ loan.days_overdue }} jour(s)
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                
+                                {% if isAdmin %}
+                                    <div class="loan-user">
+                                        <span class="label">Utilisateur:</span>
+                                        <span class="value">{{ loan.user.username }}</span>
+                                    </div>
+                                {% endif %}
+                                
+                                <div class="loan-actions">
+                                    <form action="{{ baseUrl }}?route=loan/return" method="POST">
+                                        <input type="hidden" name="loan_id" value="{{ loan.id }}">
+                                        <button type="submit" class="btn btn-primary">
+                                            <i class="fas fa-undo"></i> Retourner
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+                
+                {% include 'partials/pagination.html.twig' with {
+                    'currentPage': pagination.currentPage,
+                    'totalPages': pagination.totalPages,
+                    'hasNextPage': pagination.hasNextPage,
+                    'hasPrevPage': pagination.hasPrevPage,
+                    'baseUrl': baseUrl ~ '?route=loan'
+                } %}
+            </div>
+        {% else %}
+            <div class="empty-state">
+                <i class="fas fa-info-circle"></i>
+                <p>Vous n'avez aucun emprunt en cours.</p>
+                <a href="{{ baseUrl }}?route=media" class="btn btn-primary">Parcourir les médias</a>
+            </div>
+        {% endif %}
+    </section>
+{% endblock %}

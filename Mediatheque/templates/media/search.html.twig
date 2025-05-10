@@ -1,0 +1,93 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+    <section class="search-section">
+        <h1>Recherche de médias</h1>
+        
+        <div class="search-form-container">
+            <form class="search-form" method="get" action="{{ baseUrl }}">
+                <input type="hidden" name="route" value="media/search">
+                
+                <div class="search-inputs">
+                    <div class="form-group search-input">
+                        <label for="q">Rechercher</label>
+                        <input type="text" id="q" name="q" value="{{ query }}" placeholder="Titre, auteur, description..." required>
+                    </div>
+                    
+                    <div class="form-group type-filter">
+                        <label for="type">Type</label>
+                        <select id="type" name="type">
+                            <option value="">Tous les types</option>
+                            <option value="book" {% if type == 'book' %}selected{% endif %}>Livres</option>
+                            <option value="dvd" {% if type == 'dvd' %}selected{% endif %}>DVD</option>
+                            <option value="music" {% if type == 'music' %}selected{% endif %}>Musique / CD</option>
+                            <option value="game" {% if type == 'game' %}selected{% endif %}>Jeux vidéo</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="search-buttons">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-search"></i> Rechercher
+                    </button>
+                    
+                    <a href="{{ baseUrl }}?route=media/search" class="btn btn-outline">
+                        <i class="fas fa-redo"></i> Réinitialiser
+                    </a>
+                </div>
+            </form>
+        </div>
+        
+        {% if query %}
+            <div class="search-results-header">
+                <h2>Résultats de recherche pour "{{ query }}"</h2>
+                <span class="results-count">{{ totalResults }} média(s) trouvé(s)</span>
+            </div>
+            
+            {% if mediaItems|length > 0 %}
+                <div class="media-grid">
+                    {% for media in mediaItems %}
+                        <div class="media-card">
+                            <div class="media-icon">
+                                {% if media.type == 'book' %}
+                                    <i class="fas fa-book"></i>
+                                {% elseif media.type == 'dvd' %}
+                                    <i class="fas fa-film"></i>
+                                {% elseif media.type == 'music' %}
+                                    <i class="fas fa-music"></i>
+                                {% else %}
+                                    <i class="fas fa-gamepad"></i>
+                                {% endif %}
+                            </div>
+                            <div class="media-info">
+                                <h3><a href="{{ baseUrl }}?route=media/details&id={{ media.id }}">{{ media.title }}</a></h3>
+                                <p class="media-creator">{{ media.creator }}</p>
+                                <p class="media-year">{{ media.year }}</p>
+                                <div class="media-status {{ media.available ? 'available' : 'borrowed' }}">
+                                    {% if media.available %}
+                                        <i class="fas fa-check-circle"></i> Disponible
+                                    {% else %}
+                                        <i class="fas fa-times-circle"></i> Emprunté
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+                
+                {% include 'partials/pagination.html.twig' with {
+                    'currentPage': pagination.currentPage,
+                    'totalPages': pagination.totalPages,
+                    'hasNextPage': pagination.hasNextPage,
+                    'hasPrevPage': pagination.hasPrevPage,
+                    'baseUrl': baseUrl ~ '?route=media/search&q=' ~ query ~ (type ? '&type=' ~ type : '')
+                } %}
+            {% else %}
+                <div class="empty-state">
+                    <i class="fas fa-info-circle"></i>
+                    <p>Aucun résultat ne correspond à votre recherche.</p>
+                </div>
+            {% endif %}
+        {% endif %}
+    </section>
+{% endblock %}

@@ -1,0 +1,10 @@
+DirectoryIndex index.php
+RewriteEngine On
+RewriteBase /Mediatheque/
+
+# Si ce n'est pas un fichier existant
+RewriteCond %{REQUEST_FILENAME} !-f
+# Si ce n'est pas un répertoire existant
+RewriteCond %{REQUEST_FILENAME} !-d
+# Redirige tout vers index.php
+RewriteRule ^(.*)$ index.php?route=$1 [QSA,L]

@@ -1,0 +1,139 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+    {# Débogage des données de session #}
+    {% if app.debug %}
+        <div class="debug-info" style="background: #f5f5f5; padding: 10px; border: 1px solid #ddd; margin-bottom: 15px;">
+            <h3>Débogage</h3>
+            <p>isLoggedIn: {{ isLoggedIn ? 'Oui' : 'Non' }}</p>
+            {% if isLoggedIn %}
+                <p>user_id: {{ userData.id }}</p>
+                <p>username: {{ userData.username }}</p>
+                <p>role: {{ userData.role }}</p>
+            {% endif %}
+        </div>
+    {% endif %}
+
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Bienvenue à la Médiathèque</h1>
+            <p>Découvrez notre vaste collection de livres, DVD, CD musicaux et jeux vidéo.</p>
+            <div class="hero-buttons">
+                <a href="{{ baseUrl }}?route=media" class="btn btn-primary">Explorer les médias</a>
+                {% if not isLoggedIn %}
+                    <a href="{{ baseUrl }}?route=auth/register" class="btn btn-secondary">S'inscrire</a>
+                {% endif %}
+            </div>
+        </div>
+    </section>
+    
+    <section class="stats-section">
+        <h2>Notre collection</h2>
+        <div class="stats-container">
+            <div class="stat-card">
+                <i class="fas fa-book"></i>
+                <h3>Livres</h3>
+                <p>{{ stats.book }} disponibles</p>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-film"></i>
+                <h3>DVD</h3>
+                <p>{{ stats.dvd }} disponibles</p>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-gamepad"></i>
+                <h3>Jeux vidéo</h3>
+                <p>{{ stats.game }} disponibles</p>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-music"></i>
+                <h3>CD</h3>
+                <p>{{ stats.music|default(0) }} disponibles</p>
+            </div>
+            <div class="stat-card total">
+                <i class="fas fa-bookmark"></i>
+                <h3>Total</h3>
+                <p>{{ stats.total }} médias</p>
+            </div>
+        </div>
+    </section>
+    
+    <section class="recent-section">
+        <h2>Ajouts récents</h2>
+        
+        {% if recentMedia|length > 0 %}
+            <div class="media-grid">
+                {% for media in recentMedia %}
+                    <div class="media-card">
+                        <div class="media-icon">
+                            {% if media.type == 'book' %}
+                                <i class="fas fa-book"></i>
+                            {% elseif media.type == 'dvd' %}
+                                <i class="fas fa-film"></i>
+                            {% elseif media.type == 'music' %}
+                                <i class="fas fa-music"></i>
+                            {% else %}
+                                <i class="fas fa-gamepad"></i>
+                            {% endif %}
+                        </div>
+                        <div class="media-info">
+                            <h3><a href="{{ baseUrl }}?route=media/details&id={{ media.id }}">{{ media.title }}</a></h3>
+                            <p class="media-creator">{{ media.creator }}</p>
+                            <p class="media-year">{{ media.year }}</p>
+                            <div class="media-status {{ media.available ? 'available' : 'borrowed' }}">
+                                {% if media.available %}
+                                    <i class="fas fa-check-circle"></i> Disponible
+                                {% else %}
+                                    <i class="fas fa-times-circle"></i> Emprunté
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            
+            <div class="more-link">
+                <a href="{{ baseUrl }}?route=media" class="btn btn-outline">Voir tous les médias</a>
+            </div>
+        {% else %}
+            <div class="empty-state">
+                <i class="fas fa-info-circle"></i>
+                <p>Aucun média n'est disponible pour le moment.</p>
+            </div>
+        {% endif %}
+    </section>
+    
+    <section class="how-it-works">
+        <h2>Comment ça marche ?</h2>
+        
+        <div class="steps-container">
+            <div class="step">
+                <div class="step-number">1</div>
+                <i class="fas fa-user-plus"></i>
+                <h3>Inscription</h3>
+                <p>Créez un compte pour accéder à tous nos services.</p>
+            </div>
+            
+            <div class="step">
+                <div class="step-number">2</div>
+                <i class="fas fa-search"></i>
+                <h3>Recherche</h3>
+                <p>Trouvez les médias qui vous intéressent.</p>
+            </div>
+            
+            <div class="step">
+                <div class="step-number">3</div>
+                <i class="fas fa-hand-holding"></i>
+                <h3>Emprunt</h3>
+                <p>Empruntez vos médias préférés pour une durée de 14 jours.</p>
+            </div>
+            
+            <div class="step">
+                <div class="step-number">4</div>
+                <i class="fas fa-undo"></i>
+                <h3>Retour</h3>
+                <p>Retournez les médias et empruntez-en d'autres !</p>
+            </div>
+        </div>
+    </section>
+{% endblock %}
