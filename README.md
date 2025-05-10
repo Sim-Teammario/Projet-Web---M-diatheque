@@ -42,7 +42,7 @@ Ce projet est un système complet de gestion de médiathèque développé selon 
 
 ### 🎨 Médiathèque (Frontend)
 - **Langage** : PHP.
-- **Architecture** : MVC simplifié.
+- **Architecture** : MVC.
 - **Templates** : Twig.
 - **Design** : CSS personnalisé + layout responsive.
 - **JS** : Validation de formulaires et interactions utilisateur.
