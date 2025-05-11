@@ -95,7 +95,7 @@ API
 ### ⚙️ Installation
 #### 1️⃣ Préparation de la Base de Données
 - Créez une base **MySQL** nommée `mediatheque`.
-- Importez le fichier `database.sql`.
+- Importez le fichier `mediatheque.sql`.
 
 #### 2️⃣ Configuration de l'API
 - Modifiez `config.php` avec vos paramètres (**DB_HOST, DB_USER, etc.**).
