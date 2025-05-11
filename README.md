@@ -8,6 +8,8 @@ Ce projet est un système complet de gestion de médiathèque développé selon 
 
 💡 **Note importante** : Bien que ces deux applications soient incluses dans ce dépôt pour faciliter le déploiement et les tests, elles sont conçues pour fonctionner indépendamment et peuvent être hébergées sur des serveurs différents.
 
+démo disponible : http://mediatheque.simontaveirne.engineer/
+
 ---
 
 ## 🎯 Fonctionnalités
