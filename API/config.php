@@ -16,10 +16,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 
 // Configuration de la base de données
 define('DB_HOST', 'localhost');
-define('DB_PORT', '3307');  //port spécifique à ma configuration
+define('DB_PORT', '3307');  //port spécifique à ma configuration, à adapter selon la configuration
 define('DB_NAME', 'mediatheque');
-define('DB_USER', 'root'); // À changer en production
-define('DB_PASS', '');     // À changer en production
+define('DB_USER', 'root'); // À adapter selon la configuration
+define('DB_PASS', '');     // À adapter selon la configuration
 
 // Fonction pour obtenir la connexion PDO
 function getDbConnection() {
